@@ -1,0 +1,336 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Postaway project",
+    "summary": "Postaway project for the practice of API",
+    "description": "Postaway project by Mohd Shahnawaz",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:2500",
+      "description": "Postaway project"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "CookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "jwtToken"
+      }
+    }
+  },
+  "security": {
+    "CookieAuth": []
+  },
+  "paths": {
+    "/postaway/api/user/allUser": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Returns a list of users.",
+        "description": "All usere who have registered yourself",
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "no users Available" }
+        }
+      }
+    },
+    "/postaway/api/user/singUp": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "To Sign Up",
+        "description": "to register yourself",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "ok" },
+          "500": { "description": "server Error" }
+        }
+      }
+    },
+    "/postaway/api/user/signIn": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "To Sign In",
+        "description": "to Login yourself",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "No user Available" }
+        }
+      }
+    },
+
+    "/postaway/api/user/logOut": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "To logout",
+        "description": "to Login yourself",
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "error" }
+        }
+      }
+    },
+
+    "/postaway/api/post/addpost": {
+      "post": {
+        "tags": ["Post"],
+        "summary": "To Add Post",
+        "security": [{ "CookieAuth": {} }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "imageUrl": { "type": "string", "format": "binary" },
+                  "caption": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "post created"
+          },
+          "400": { "description": "error" }
+        }
+      }
+    },
+
+    "/postaway/api/post/getuserpost": {
+      "get": {
+        "tags": ["Post"],
+        "summary": "To get user Post",
+        "security": [{ "CookieAuth": {} }],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "No Post Found" }
+        }
+      }
+    },
+    "/postaway/api/post/getPostById/{postId}": {
+      "get": {
+        "tags": ["Post"],
+        "summary": "Get post by PostID",
+        "security": [{ "CookieAuth": {} }],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "the ID of pathId",
+            "schema": { "type": "Number" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "No Post Found" }
+        }
+      }
+    },
+
+    "/postaway/api/post/updatePost": {
+      "put": {
+        "tags": ["Post"],
+        "summary": "To update the Post",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "query",
+            "description": "provide PostId",
+            "schema": { "type": "Number" }
+          },
+          {
+            "name": "caption",
+            "in": "query",
+            "description": "provide caption",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "error" }
+        }
+      }
+    },
+
+    "/postaway/api/post/deletePost": {
+      "delete": {
+        "tags": ["Post"],
+        "summary": "To delete the Post",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "query",
+            "description": "provide PostId to delete that post",
+            "schema": { "type": "Number" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "No Post Found" }
+        }
+      }
+    },
+
+    "/postaway/api/like/addlike/{postId}": {
+      "post": {
+        "tags": ["like"],
+        "summary": "Like a post",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "provide PostId to like that post",
+            "schema": { "type": "Number" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "No Post Found" }
+        }
+      }
+    },
+
+    "/postaway/api/like/deletelike/{likeId}": {
+      "delete": {
+        "tags": ["like"],
+        "summary": "delete a like",
+        "parameters": [
+          {
+            "name": "likeId",
+            "in": "path",
+            "description": "provide likeId to delete that like",
+            "schema": { "type": "Number" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "no Likes found for given user" }
+        }
+      }
+    },
+
+    "/postaway/api/like/getlike": {
+      "get": {
+        "tags": ["like"],
+        "summary": "get a like",
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "no Likes found for given user" }
+        }
+      }
+    },
+
+    "/postaway/api/comment/addComment": {
+      "post": {
+        "tags": ["Comment"],
+        "summary": "add Comment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "postId": { "type": "integer" },
+                  "content": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "OK" },
+          "500": { "description": "error" }
+        }
+      }
+    },
+
+    "/postaway/api/comment/getCommentByUser": {
+      "get": {
+        "tags": ["Comment"],
+        "summary": "get Comment by user",
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "No comments available of userId" }
+        }
+      }
+    },
+
+    "/postaway/api/comment/updateComment": {
+      "put": {
+        "tags": ["Comment"],
+        "summary": "update Comment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "commentId": { "type": "integer" },
+                  "content": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "No comment found for userId" },
+          "500": { "description": "error" }
+        }
+      }
+    },
+
+    "/postaway/api/comment/deleteComment": {
+      "delete": {
+        "tags": ["Comment"],
+        "summary": "delete Comment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "commentId": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "No comment found for userId" },
+          "500": { "description": "error" }
+        }
+      }
+    }
+  }
+}
